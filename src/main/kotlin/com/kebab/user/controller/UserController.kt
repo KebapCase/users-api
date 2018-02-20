@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
+import io.swagger.annotations.ApiImplicitParams
+import io.swagger.annotations.ApiImplicitParam
 import org.apache.commons.lang3.math.NumberUtils
 import org.apache.http.HttpStatus.SC_BAD_REQUEST
 import org.apache.http.HttpStatus.SC_NOT_FOUND
@@ -94,7 +96,7 @@ class UserController(private val userService: UserService) {
     )
     @PutMapping("/{guid}", consumes = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
-    //@ApiImplicitParams(ApiImplicitParam("token", paramType = "header", required = true))
+    @ApiImplicitParams(ApiImplicitParam("token", paramType = "header", required = true))
     fun updateUserByGuid(@ApiParam("f647e1fa-ad24-4f7e-a18e-4dd197feb66b") @PathVariable("guid") guid: UUID,
                          @RequestBody user: User) =
             userService.updateUserByGuid(guid, user)
@@ -102,7 +104,7 @@ class UserController(private val userService: UserService) {
     @ApiOperation(value = "Deletes a User by GUID", response = String::class)
     @ApiResponses(ApiResponse(code = SC_NOT_FOUND, message = EntityNotFoundException.REASON))
     @DeleteMapping("/{guid}", produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
-    //@ApiImplicitParams(ApiImplicitParam("token", paramType = "header", required = true))
+    @ApiImplicitParams(ApiImplicitParam("token", paramType = "header", required = true))
     fun deleteUserByGuid(@ApiParam("f647e1fa-ad24-4f7e-a18e-4dd197feb66b") @PathVariable("guid") guid: UUID) =
             userService.deleteUserByGuid(guid).run { deleteRecords(NumberUtils.LONG_ONE, User::class.java) }
 }

@@ -7,7 +7,7 @@ import com.kebab.core.util.validateOrder
 import com.kebab.user.model.User
 import com.kebab.user.repository.UserRepository
 import org.springframework.stereotype.Service
-import java.util.UUID
+import javax.transaction.Transactional
 
 @Service
 class UserService(private val userRepository: UserRepository) {
@@ -15,12 +15,16 @@ class UserService(private val userRepository: UserRepository) {
     fun createUser(user: User) =
             userRepository.save(user.validate())!!
 
-    fun updateUserByGuid(guid: UUID, model: User) =
-            userRepository.save(model.mergeWith(userRepository.findByGuid(guid)!!).validate())!!
+    @Transactional
+    fun updateUserById(id: Long, model: User) =
+            userRepository.save(model.mergeWith(userRepository.findOne(id)!!).validate())!!
 
-    fun findUserByGuid(guid: UUID) = userRepository.findByGuid(guid)
+    fun findUserById(id: Long): User? = userRepository.findOne(id)
 
-    fun deleteUserByGuid(guid: UUID) = userRepository.deleteByGuid(guid)
+    fun findUserByUsername(username: String) = userRepository.findByUsername(username)
+
+    @Transactional
+    fun deleteUserById(id: Long) = userRepository.deleteById(id)
 
     fun findAllUsers(page: Int,
                      limit: Int,

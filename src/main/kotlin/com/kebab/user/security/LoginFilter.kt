@@ -1,9 +1,9 @@
 package com.kebab.user.security
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.kebab.core.util.mapper
+import com.kebab.user.model.User
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
@@ -19,15 +19,9 @@ class LoginFilter(authManager: AuthenticationManager) : UsernamePasswordAuthenti
 
     @Throws(AuthenticationException::class, IOException::class, ServletException::class)
     override fun attemptAuthentication(
-            req: HttpServletRequest, res: HttpServletResponse): Authentication {
-        val creds = ObjectMapper()
-                .readValue(req.inputStream, com.kebab.user.model.User::class.java)
-        return authenticationManager.authenticate(
-                UsernamePasswordAuthenticationToken(
-                        creds.username,
-                        creds.password,
-                        emptyList<GrantedAuthority>()
-                )
-        )
-    }
+            req: HttpServletRequest, res: HttpServletResponse) =
+            with(mapper().readValue(req.inputStream, User::class.java)) {
+                authenticationManager.authenticate(UsernamePasswordAuthenticationToken(username, password,
+                        emptyList<GrantedAuthority>()))
+            }!!
 }

@@ -10,14 +10,17 @@ import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import org.hibernate.validator.constraints.Length
 import org.hibernate.validator.constraints.NotBlank
-import javax.persistence.*
+import javax.persistence.Entity
 import javax.persistence.EnumType.STRING
+import javax.persistence.Enumerated
+import javax.persistence.Table
+import javax.persistence.UniqueConstraint
 
 @Entity
 @JsonInclude(NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ApiModel(description = "Object contains all required information for a user")
-@Table(name = "user", uniqueConstraints = [UniqueConstraint(name = "unique_user_guid", columnNames = arrayOf("guid"))])
+@Table(name = "user", uniqueConstraints = [(UniqueConstraint(name = "unique_user_guid", columnNames = arrayOf("guid")))])
 data class User(
 
         @get:NotBlank

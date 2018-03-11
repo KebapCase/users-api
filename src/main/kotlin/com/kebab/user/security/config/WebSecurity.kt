@@ -16,9 +16,8 @@ class WebSecurity(val userDetailsService: UserDetailsService) : WebSecurityConfi
     override fun configure(http: HttpSecurity) {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers( "/", "/swagger.json", "/swagger/swagger.json", "/logs", "/swagger-ui").permitAll()
+                .antMatchers("/", "/swagger.json", "/swagger/swagger.json", "/logs", "/swagger-ui").permitAll()
                 .antMatchers(HttpMethod.POST, "/login", "/signUp", "/socialLogin").permitAll()
-                .antMatchers("/api/**").authenticated()
                 .and()
                 .addFilter(LoginFilter(authenticationManager()))
     }

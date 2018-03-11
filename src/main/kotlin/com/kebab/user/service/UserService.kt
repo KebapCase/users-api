@@ -1,5 +1,6 @@
 package com.kebab.user.service
 
+import com.kebab.core.exception.EntityNotFoundException
 import com.kebab.core.util.findPage
 import com.kebab.core.util.mergeWith
 import com.kebab.core.util.validate
@@ -15,11 +16,10 @@ class UserService(private val userRepository: UserRepository) {
     fun createUser(user: User) =
             userRepository.save(user.validate())!!
 
-    @Transactional
     fun updateUserById(id: Long, model: User) =
             userRepository.save(model.mergeWith(userRepository.findOne(id)!!).validate())!!
 
-    fun findUserById(id: Long): User? = userRepository.findOne(id)
+    fun findUserById(id: Long) = userRepository.findOne(id) ?: throw EntityNotFoundException()
 
     fun findUserByUsername(username: String) = userRepository.findByUsername(username)
 

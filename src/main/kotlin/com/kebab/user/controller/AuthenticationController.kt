@@ -4,45 +4,48 @@ import com.kebab.core.exception.MalformedRequestDataException
 import com.kebab.user.security.exception.UserAlreadyExistsException
 import com.kebab.user.model.User
 import com.kebab.user.service.UserService
-import org.apache.http.HttpStatus
-import org.springframework.http.MediaType
-import com.kebab.user.security.util.JwtUtils.toToken
+import com.kebab.user.security.util.toToken
 import com.kebab.user.service.dto.TokenDto
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
-import org.springframework.web.bind.annotation.RequestMethod
+import org.apache.http.HttpStatus.SC_BAD_REQUEST
+import org.apache.http.HttpStatus.SC_FORBIDDEN
+import org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.TEXT_HTML_VALUE
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.RequestMethod.POST
 
 @RestController
-@RequestMapping("/")
+@RequestMapping
 @Api(value = "Authentication Management", description = "Endpoints for managing Authentication logic")
-@CrossOrigin(origins = ["*"], allowedHeaders = ["*"], methods = [(RequestMethod.GET), (RequestMethod.POST)])
+@CrossOrigin(origins = ["*"], allowedHeaders = ["*"], methods = [POST])
 class AuthenticationController(private val userService: UserService) {
     @ApiOperation(value = "Login request", response = TokenDto::class)
-    @ApiResponses(ApiResponse(code = HttpStatus.SC_BAD_REQUEST, message = MalformedRequestDataException.REASON))
-    @PostMapping("/login", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiResponses(ApiResponse(code = SC_BAD_REQUEST, message = MalformedRequestDataException.REASON))
+    @PostMapping("/login", produces = [APPLICATION_JSON_VALUE])
     fun login(@ApiParam("User", allowEmptyValue = true) @RequestBody user: User) =
             TokenDto(userService.findUserByUsername(user.username!!)!!.toToken())
 
-    @ApiOperation(value = "Sign-up request", response = TokenDto::class)
-    @ApiResponses(ApiResponse(code = HttpStatus.SC_BAD_REQUEST, message = MalformedRequestDataException.REASON),
-            ApiResponse(code = HttpStatus.SC_FORBIDDEN, message = UserAlreadyExistsException.REASON))
-    @PostMapping("/signUp", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation(value = "Sign-up request", response = String::class)
+    @ApiResponses(ApiResponse(code = SC_BAD_REQUEST, message = MalformedRequestDataException.REASON),
+            ApiResponse(code = SC_FORBIDDEN, message = UserAlreadyExistsException.REASON))
+    @PostMapping("/signUp", produces = [TEXT_HTML_VALUE, APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
     fun signUp(@ApiParam("User") @RequestBody user: User) =
-            if (userService.findUserByUsername(user.username!!) != null)
+            userService.findUserByUsername(user.username!!)?.let {
                 throw UserAlreadyExistsException()
-            else TokenDto(userService.createUser(user).toToken())
+            } ?: userService.createUser(user).toToken()
 
     @ApiOperation(value = "Social login request", response = TokenDto::class)
-    @ApiResponses(ApiResponse(code = HttpStatus.SC_BAD_REQUEST, message = MalformedRequestDataException.REASON))
-    @PostMapping("/socialLogin", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiResponses(ApiResponse(code = SC_BAD_REQUEST, message = MalformedRequestDataException.REASON))
+    @PostMapping("/socialLogin", produces = [APPLICATION_JSON_VALUE])
     fun socialLogIn(@ApiParam("User") @RequestBody user: User) =
             TokenDto((userService.findUserByUsername(user.username!!) ?: userService.createUser(user)).toToken())
 

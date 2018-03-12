@@ -50,7 +50,7 @@ class UserController(private val userService: UserService) {
             response = User::class, responseContainer = "List")
     @ApiResponses(ApiResponse(code = SC_BAD_REQUEST, message = MalformedRequestDataException.REASON))
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
-    @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true))
+    @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
     fun findAllUsers(@ApiParam("0", allowEmptyValue = true) @RequestParam("page", required = false, defaultValue = "0") page: Int,
                      @ApiParam("0", allowEmptyValue = true) @RequestParam("limit", required = false, defaultValue = "0") limit: Int,
                      @ApiParam("{\"property\":\"name\",\"direction\":\"desc\"}", allowEmptyValue = true) @RequestParam("order", required = false, defaultValue = "") order: String,
@@ -60,7 +60,7 @@ class UserController(private val userService: UserService) {
     @ApiOperation(value = "Gets User record for a given Id", response = User::class)
     @ApiResponses(ApiResponse(code = SC_NOT_FOUND, message = EntityNotFoundException.REASON))
     @GetMapping("/{id}", produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
-    @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true))
+    @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
     fun findUserById(@ApiParam("1") @PathVariable("id") id: Long) =
             userService.findUserById(id)
 
@@ -72,7 +72,7 @@ class UserController(private val userService: UserService) {
     )
     @PutMapping("/{id}", consumes = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
-    @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true))
+    @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
     fun updateUserById(@ApiParam("1") @PathVariable("id") id: Long,
                          @RequestBody user: User) =
             userService.updateUserById(id, user)
@@ -80,7 +80,7 @@ class UserController(private val userService: UserService) {
     @ApiOperation(value = "Deletes a User by Id", response = String::class)
     @ApiResponses(ApiResponse(code = SC_NOT_FOUND, message = EntityNotFoundException.REASON))
     @DeleteMapping("/{id}", produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
-    @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true))
+    @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
     fun deleteUserById(@ApiParam("1") @PathVariable("id") id: Long) =
             userService.deleteUserById(id)
 }

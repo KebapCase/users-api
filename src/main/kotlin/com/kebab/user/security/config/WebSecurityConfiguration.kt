@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author Valentin Trusevich
  */
 @Configuration
-class WebConfigurer(val authenticationInterceptor: AuthenticationInterceptor
+class WebSecurityConfiguration(val authenticationInterceptor: AuthenticationInterceptor
 ) : WebMvcConfigurerAdapter() {
 
     override fun addInterceptors(registry: InterceptorRegistry) {

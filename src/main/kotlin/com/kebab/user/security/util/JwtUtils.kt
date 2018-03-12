@@ -1,6 +1,7 @@
 package com.kebab.user.security.util
 
 import com.kebab.core.exception.UnauthorizedException
+import com.kebab.core.util.toJson
 import com.kebab.user.model.User
 import com.kebab.user.model.UserRole
 import io.jsonwebtoken.Jwts
@@ -20,7 +21,7 @@ fun User.toToken(): String {
     val claims = HashMap<String, Any>()
     claims[USERNAME] = username!!
     claims[ROLE] = role!!
-    return claims.toJWT()
+    return claims.toJWT().toJson()
 }
 
 fun String.fromToken() = with(toClaims().body) {

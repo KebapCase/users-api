@@ -1,9 +1,11 @@
 package com.kebab.user.security.config
 
 import com.kebab.user.security.AuthenticationInterceptor
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 /**
  * @author Valentin Trusevich
@@ -17,4 +19,7 @@ class WebSecurityConfiguration(val authenticationInterceptor: AuthenticationInte
                 .addInterceptor(authenticationInterceptor)
                 .addPathPatterns("/api/**")
     }
+
+    @Bean
+    fun passwordEncoder() = BCryptPasswordEncoder()
 }

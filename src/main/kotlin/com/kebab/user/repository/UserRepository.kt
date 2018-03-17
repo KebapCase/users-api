@@ -7,6 +7,6 @@ import org.springframework.data.repository.PagingAndSortingRepository
 interface UserRepository : PagingAndSortingRepository<User, Long>, GuidRepository<User> {
 
     fun existsByUsername(username: String): Boolean
-    fun findByUsername(username: String): User?
+    fun findOne(username: String): User?
     fun deleteById(id: Long)
 }

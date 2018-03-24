@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY
 import com.kebab.core.model.BaseEntity
+import com.kebab.core.validation.ContainingPassword
 import com.kebab.core.validation.Email
+import com.kebab.core.validation.PasswordMatch
 import com.kebab.core.validation.UrlValid
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
@@ -17,6 +19,7 @@ import javax.persistence.Table
 import javax.persistence.UniqueConstraint
 
 @Entity
+@PasswordMatch
 @JsonInclude(NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ApiModel(description = "Object contains all required information for a user")
@@ -31,7 +34,12 @@ data class User(
         @get:NotBlank
         @get:Length(min = 4, max = 65)
         @ApiModelProperty("User's password", example = "kekCheburek", required = true)
-        var password: String? = null,
+        override var password: String? = null,
+
+        @get:NotBlank
+        @get:Length(min = 4, max = 65)
+        @ApiModelProperty("Confirm password", example = "kekCheburek", required = true)
+        override var confirmPassword: String? = null,
 
         @get:NotBlank
         @get:Length(min = 2, max = 40)
@@ -58,7 +66,7 @@ data class User(
         @ApiModelProperty("User's role", example = "ROLE_ADMIN")
         var role: UserRole? = null
 
-) : BaseEntity() {
+) : BaseEntity(), ContainingPassword {
 
     companion object {
 

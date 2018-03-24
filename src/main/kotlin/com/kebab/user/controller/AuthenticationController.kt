@@ -36,15 +36,13 @@ class AuthenticationController(private val userService: UserService) {
     @ApiResponses(ApiResponse(code = SC_BAD_REQUEST, message = MalformedRequestDataException.REASON),
             ApiResponse(code = SC_FORBIDDEN, message = UserAlreadyExistsException.REASON))
     @PostMapping("/signUp", produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
-    fun signUp(@ApiParam("User") @RequestBody user: User): String {
-        if (userService.checkIfUserExists(user)) throw UserAlreadyExistsException()
-        return userService.createUser(user).toToken()
-    }
+    fun signUp(@ApiParam("User") @RequestBody user: User) =
+            userService.createUser(user)
 
     @ApiOperation(value = "Social login request", response = String::class)
     @ApiResponses(ApiResponse(code = SC_BAD_REQUEST, message = MalformedRequestDataException.REASON))
     @PostMapping("/socialLogin", produces = [APPLICATION_JSON_VALUE])
     fun socialLogIn(@ApiParam("User") @RequestBody user: User) =
-            (userService.findUserByUsername(user.username!!) ?: userService.createUser(user)).toToken()
+            userService.socialLogin(user)
 
 }

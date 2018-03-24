@@ -3,25 +3,20 @@ package com.kebab.user.controller
 import com.kebab.core.exception.EntityNotFoundException
 import com.kebab.core.exception.MalformedRequestDataException
 import com.kebab.core.exception.ModelValidationException
-import com.kebab.core.util.deleteRecords
 import com.kebab.user.model.User
 import com.kebab.user.service.UserService
-import com.kebab.user.utils.toToken
 import io.swagger.annotations.Api
+import io.swagger.annotations.ApiImplicitParam
+import io.swagger.annotations.ApiImplicitParams
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
-import io.swagger.annotations.ApiImplicitParams
-import io.swagger.annotations.ApiImplicitParam
 import org.apache.http.HttpStatus.SC_BAD_REQUEST
 import org.apache.http.HttpStatus.SC_NOT_FOUND
 import org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY
-import org.springframework.http.HttpStatus.CREATED
-import org.springframework.http.HttpStatus.OK
 import org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
-import org.springframework.http.MediaType.TEXT_PLAIN_VALUE
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -76,7 +71,7 @@ class UserController(private val userService: UserService) {
             produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
     @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
     fun updateUserById(@ApiParam("1") @PathVariable("id") id: Long,
-                         @RequestBody user: User) =
+                       @RequestBody user: User) =
             userService.updateUserById(id, user)
 
     @ApiOperation(value = "Deletes a User by Id", response = String::class)

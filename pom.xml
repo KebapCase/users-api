@@ -31,8 +31,8 @@
 
         <dependency>
             <groupId>com.kebab.core</groupId>
-            <artifactId>microservice-core</artifactId>
-            <version>1.0.12</version>
+            <artifactId>kebab-core</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>

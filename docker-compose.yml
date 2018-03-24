@@ -29,6 +29,17 @@ services:
                  -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
                  -Djavax.servlet.request.encoding=UTF-8
                  -Dfile.encoding=UTF-8
+  kebab-rabbitmq:
+    container_name: kebab-rabbitmq
+    image: rabbitmq:management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: kebab
+      RABBITMQ_DEFAULT_PASS: kebab
+    ports:
+      - 15672:15672
+      - 5672:5672
+    logging:
+      driver: none
   kebab.mysql:
     container_name: kebab.mysql
     image: mysql:latest

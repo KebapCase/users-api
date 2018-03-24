@@ -22,12 +22,12 @@ class UserService(private val userRepository: UserRepository,
             throw IncorrectPasswordException()
     }
 
-    fun createUser(user: User) = userRepository.save(user.apply {
+    fun createUser(user: User) = userRepository.save(user.validate().apply {
         password = passwordEncoder.encode(password)
-    }.validate())!!.toToken()
+    })!!.toToken()
 
     fun updateUserById(id: Long, model: User) =
-            userRepository.save(model.mergeWith(userRepository.findOne(id)!!).validate())!!
+            userRepository.save(model.validate().mergeWith(userRepository.findOne(id)!!))!!
 
     fun findUserById(id: Long) = userRepository.findOne(id) ?: throw EntityNotFoundException()
 
@@ -38,9 +38,7 @@ class UserService(private val userRepository: UserRepository,
             .also { sender.sendMessage("deleteUser", id) }
 
     fun findAllUsers(page: Int,
-                     limit: Int,
-                     orderOptions: String,
-                     queryParameters: Map<String, String>) =
+                     limit: Int) =
             userRepository.findAll(PageRequest(page, limit)) ?: throw EntityNotFoundException()
 
     fun socialLogin(user: User) = userRepository.findByUsername(user.username!!) ?: createUser(user)

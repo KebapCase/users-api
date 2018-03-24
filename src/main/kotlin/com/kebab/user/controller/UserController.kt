@@ -49,10 +49,8 @@ class UserController(private val userService: UserService) {
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
     @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
     fun findAllUsers(@ApiParam("0", allowEmptyValue = true) @RequestParam("page", required = false, defaultValue = "0") page: Int,
-                     @ApiParam("0", allowEmptyValue = true) @RequestParam("limit", required = false, defaultValue = "0") limit: Int,
-                     @ApiParam("{\"property\":\"name\",\"direction\":\"desc\"}", allowEmptyValue = true) @RequestParam("order", required = false, defaultValue = "") order: String,
-                     @ApiParam(hidden = true) @RequestParam queryParameters: Map<String, String>) =
-            userService.findAllUsers(page, limit, order, queryParameters)
+                     @ApiParam("0", allowEmptyValue = true) @RequestParam("limit", required = false, defaultValue = "10") limit: Int) =
+            userService.findAllUsers(page, limit)
 
     @ApiOperation(value = "Gets User record for a given Id", response = User::class)
     @ApiResponses(ApiResponse(code = SC_NOT_FOUND, message = EntityNotFoundException.REASON))

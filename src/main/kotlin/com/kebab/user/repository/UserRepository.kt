@@ -8,6 +8,4 @@ interface UserRepository : BaseEntityRepository<User> {
     fun existsByUsername(username: String): Boolean
 
     fun findByUsername(username: String): User?
-
-    fun deleteById(id: Long)
 }

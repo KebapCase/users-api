@@ -34,7 +34,7 @@ class UserService(private val userRepository: UserRepository,
     fun findUserByUsername(username: String) = userRepository.findByUsername(username)
             ?: throw EntityNotFoundException()
 
-    fun deleteUserById(id: Long) = userRepository.deleteById(id)
+    fun deleteUserById(id: Long) = userRepository.delete(id)
             .also { sender.sendMessage("deleteUser", id) }
 
     fun findAllUsers(page: Int,

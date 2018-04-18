@@ -9,6 +9,6 @@
 
 [Lab_3](https://docs.google.com/document/d/14lN0ZEvPhfRVzFfbEB4qoTPB9iIe79OH4oq2sOA8e38/edit?usp=sharing)
 
-[Lab_4](https://docs.google.com/document/d/1d7HnboLxjcF7kHQVLt8cDdl9lzyg3cRBktzbUG2GAaM/edit?usp=sharing)\
+[Lab_4](https://docs.google.com/document/d/14lN0ZEvPhfRVzFfbEB4qoTPB9iIe79OH4oq2sOA8e38/edit?usp=sharing)
 
 [Lab 5](https://docs.google.com/document/d/1d7HnboLxjcF7kHQVLt8cDdl9lzyg3cRBktzbUG2GAaM/edit#)

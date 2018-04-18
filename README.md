@@ -6,3 +6,5 @@
 [Conventions-Tutorials](https://docs.google.com/document/d/12evdEGk64Bk_11drYOs32VVX937T8McvMBYQ2tTutHQ/edit)
 
 [Scrum Desk](https://app.scrumdesk.com/#/projects/25595/work-scrum)
+
+[Lab_3](https://docs.google.com/document/d/14lN0ZEvPhfRVzFfbEB4qoTPB9iIe79OH4oq2sOA8e38/edit?usp=sharing)

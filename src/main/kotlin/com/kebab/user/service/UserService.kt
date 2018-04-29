@@ -1,7 +1,6 @@
 package com.kebab.user.service
 
 import com.kebab.core.exception.EntityNotFoundException
-import com.kebab.core.jms.JmsMessageSender
 import com.kebab.core.util.mergeWith
 import com.kebab.core.util.validate
 import com.kebab.user.model.User
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(private val userRepository: UserRepository,
                   private val passwordEncoder: PasswordEncoder,
-                  private val sender: JmsMessageSender) {
+                  private val eventService: EventService) {
 
     fun getValidUserIfExists(user: User) = user.apply {
         if (!passwordEncoder.matches(password!!, findUserByUsername(username!!).password))
@@ -35,7 +34,7 @@ class UserService(private val userRepository: UserRepository,
             ?: throw EntityNotFoundException()
 
     fun deleteUserById(id: Long) = userRepository.delete(id)
-            .also { sender.sendMessage("deleteUser", id) }
+            .also { eventService.deleteByCreatorId(id) }
 
     fun findAllUsers(page: Int,
                      limit: Int) =

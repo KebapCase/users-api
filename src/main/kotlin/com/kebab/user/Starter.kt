@@ -7,9 +7,6 @@ import org.springframework.boot.web.support.SpringBootServletInitializer
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.transaction.annotation.EnableTransactionManagement
 
-/**
- * Class contains application-wide annotation to enable/disable functionality (core/provided by dependencies).
- */
 @EnableJpaRepositories
 @SpringBootApplication
 @EnableTransactionManagement

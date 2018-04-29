@@ -3,8 +3,8 @@ package com.kebab.user.controller
 import com.kebab.core.exception.EntityNotFoundException
 import com.kebab.core.exception.MalformedRequestDataException
 import com.kebab.core.exception.ModelValidationException
-import com.kebab.user.model.User
-import com.kebab.user.service.UserService
+import com.kebab.user.model.Event
+import com.kebab.user.service.EventService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiImplicitParams
@@ -32,34 +32,45 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * Class contains all necessary methods to work and modify [User] records.
+ * Class contains all necessary methods to work and modify [Event] records.
  *
  * @author Valentin Trusevich
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("/api/users")
-@Api(value = "User Management", description = "Endpoints for managing Users entities")
+@RequestMapping("/api/events")
+@Api(value = "Event Management", description = "Endpoints for managing Events entities")
 @CrossOrigin(origins = ["*"], allowedHeaders = ["*"], methods = [GET, POST, PUT, DELETE])
-class UserController(private val userService: UserService) {
+class EventController(private val eventService: EventService) {
 
     @ApiOperation(value = "Retrieves a list of User records (supports pagination and ordering)",
-            response = User::class, responseContainer = "List")
+            response = Event::class, responseContainer = "List")
     @ApiResponses(ApiResponse(code = SC_BAD_REQUEST, message = MalformedRequestDataException.REASON))
     @GetMapping(produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
     @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
-    fun findAllUsers(@ApiParam("0", allowEmptyValue = true) @RequestParam("page", required = false, defaultValue = "0") page: Int,
-                     @ApiParam("0", allowEmptyValue = true) @RequestParam("limit", required = false, defaultValue = "10") limit: Int) =
-            userService.findAllUsers(page, limit)
+    fun findAllEvents(@ApiParam("0", allowEmptyValue = true) @RequestParam("page", required = false, defaultValue = "0") page: Int,
+                      @ApiParam("0", allowEmptyValue = true) @RequestParam("limit", required = false, defaultValue = "0") limit: Int) =
+            eventService.findAllEvents(page, limit)
 
-    @ApiOperation(value = "Gets User record for a given Id", response = User::class)
+    @ApiOperation(value = "Gets User record for a given Id", response = Event::class)
     @ApiResponses(ApiResponse(code = SC_NOT_FOUND, message = EntityNotFoundException.REASON))
     @GetMapping("/{id}", produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
     @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
-    fun findUserById(@ApiParam("1") @PathVariable("id") id: Long) =
-            userService.findUserById(id)
+    fun findEventById(@ApiParam("1") @PathVariable("id") id: Long) =
+            eventService.findEventById(id)
 
-    @ApiOperation(value = "Updates an existing User by Id", response = User::class)
+    @ApiOperation(value = "Updates an existing User by Id", response = Event::class)
+    @ApiResponses(
+            ApiResponse(code = SC_BAD_REQUEST, message = MalformedRequestDataException.REASON),
+            ApiResponse(code = SC_NOT_FOUND, message = EntityNotFoundException.REASON),
+            ApiResponse(code = SC_UNPROCESSABLE_ENTITY, message = ModelValidationException.REASON)
+    )
+    @PutMapping("", consumes = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE],
+            produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
+    @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
+    fun createEvent(@RequestBody event: Event) = eventService.createEvent(event)
+
+    @ApiOperation(value = "Updates an existing User by Id", response = Event::class)
     @ApiResponses(
             ApiResponse(code = SC_BAD_REQUEST, message = MalformedRequestDataException.REASON),
             ApiResponse(code = SC_NOT_FOUND, message = EntityNotFoundException.REASON),
@@ -68,14 +79,14 @@ class UserController(private val userService: UserService) {
     @PutMapping("/{id}", consumes = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE],
             produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
     @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
-    fun updateUserById(@ApiParam("1") @PathVariable("id") id: Long,
-                       @RequestBody user: User) =
-            userService.updateUserById(id, user)
+    fun updateEventById(@ApiParam("1") @PathVariable("id") id: Long,
+                        @RequestBody event: Event) =
+            eventService.updateEventById(id, event)
 
     @ApiOperation(value = "Deletes a User by Id", response = String::class)
     @ApiResponses(ApiResponse(code = SC_NOT_FOUND, message = EntityNotFoundException.REASON))
     @DeleteMapping("/{id}", produces = [APPLICATION_JSON_VALUE, APPLICATION_JSON_UTF8_VALUE])
     @ApiImplicitParams(ApiImplicitParam("Authorization", name = "Authorization", paramType = "header", required = true, type = "string"))
-    fun deleteUserById(@ApiParam("1") @PathVariable("id") id: Long) =
-            userService.deleteUserById(id)
+    fun deleteEventById(@ApiParam("1") @PathVariable("id") id: Long) =
+            eventService.deleteEventById(id)
 }
